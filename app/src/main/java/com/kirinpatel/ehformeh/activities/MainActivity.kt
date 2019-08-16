@@ -6,8 +6,10 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import com.kirinpatel.ehformeh.R
@@ -44,6 +46,14 @@ class MainActivity : AppCompatActivity() {
         }
         buyFab.setBackgroundColor(deal.theme.accentColor)
         ImageViewCompat.setImageTintList(buyFab, ColorStateList.valueOf(deal.theme.backgroundColor))
+        val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
+        constraintLayout.setBackgroundColor(deal.theme.backgroundColor)
+        val dealTitleTextView = findViewById<TextView>(R.id.dealTitleTextView)
+        dealTitleTextView.text = deal.title
+        dealTitleTextView.setTextColor(deal.theme.accentColor)
+        val dealPriceTextView = findViewById<TextView>(R.id.dealPriceTextView)
+        dealPriceTextView.text = deal.price
+        dealPriceTextView.setTextColor(deal.theme.accentColor)
     }
 
     companion object {
