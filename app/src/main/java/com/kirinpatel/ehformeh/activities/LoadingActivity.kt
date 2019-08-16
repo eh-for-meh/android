@@ -5,12 +5,12 @@ import android.animation.ValueAnimator
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.android.material.snackbar.Snackbar
 import com.kirinpatel.ehformeh.R
+import com.kirinpatel.ehformeh.utils.Deal
 import com.kirinpatel.ehformeh.utils.Theme
 
 class LoadingActivity : AppCompatActivity() {
@@ -18,13 +18,12 @@ class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
-
         loadCurrentTheme()
     }
 
     private fun loadCurrentTheme() {
         Theme.getCurrentTheme({ theme ->
-            animateBackgroundColor(Color.parseColor(theme.backgroundColor))
+            animateBackgroundColor(theme.backgroundColor)
             animateTitleAlpha()
         }) { error ->
             val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
@@ -33,17 +32,19 @@ class LoadingActivity : AppCompatActivity() {
                     .setAction("Retry") {
                         loadCurrentTheme()
                     }
+                    .setActionTextColor(Color.LTGRAY)
                     .show()
         }
     }
 
-    private fun animateBackgroundColor(color: Int) {
+    private fun animateBackgroundColor(backgroundColor: Int) {
         val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
-        val valueAnimator = ValueAnimator.ofInt(Color.WHITE, color)
+        val valueAnimator = ValueAnimator.ofInt(Color.WHITE, backgroundColor)
         valueAnimator.setEvaluator(ArgbEvaluator())
         valueAnimator.addUpdateListener {
             val value = it.animatedValue as Int
             constraintLayout.setBackgroundColor(value)
+            loadMainActivity()
         }
         valueAnimator.interpolator = LinearInterpolator()
         valueAnimator.duration = 1000
@@ -60,5 +61,21 @@ class LoadingActivity : AppCompatActivity() {
         valueAnimator.interpolator = LinearInterpolator()
         valueAnimator.duration = 500
         valueAnimator.start()
+    }
+
+    private fun loadMainActivity() {
+        Deal.getCurrentDeal({ deal ->
+            val intent = MainActivity.createIntent(this, deal)
+            startActivity(intent)
+        }) { error ->
+            val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
+            Snackbar
+                    .make(constraintLayout, error.message, Snackbar.LENGTH_LONG)
+                    .setAction("Retry") {
+                        loadMainActivity()
+                    }
+                    .setActionTextColor(Color.LTGRAY)
+                    .show()
+        }
     }
 }
