@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -24,9 +25,10 @@ class MainActivity : AppCompatActivity() {
             setupView(deal)
         }
 
-        buyFab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        buyFab.setOnClickListener {
+            val uri = Uri.parse("https://meh.com/account/signin?returnurl=https%3A%2F%2Fmeh.com%2F%23checkout")
+            val browserIntent = Intent(Intent.ACTION_VIEW, uri)
+            startActivity(browserIntent)
         }
     }
 
