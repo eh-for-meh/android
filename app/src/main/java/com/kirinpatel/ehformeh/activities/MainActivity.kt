@@ -6,14 +6,15 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import com.kirinpatel.ehformeh.R
 import com.kirinpatel.ehformeh.utils.Deal
+import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
 
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         val dealPriceTextView = findViewById<TextView>(R.id.dealPriceTextView)
         dealPriceTextView.text = deal.price
         dealPriceTextView.setTextColor(deal.theme.accentColor)
+        Picasso.get().load(deal.photos[0]).into(findViewById<ImageView>(R.id.testImageView))
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package com.kirinpatel.ehformeh.utils
 
+import android.net.Uri
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -13,12 +14,15 @@ data class Deal(
         val features: String,
         val specifications: String,
         val theme: Theme,
-        val photos: List<String>,
+        private val _photos: List<String>,
         val story: Story,
         val items: List<Item>
 ): Serializable {
 
     var date: Date? = null
+
+    val photos: List<Uri>
+        get() = this._photos.map { Uri.parse(it) }
 
     val price: String
         get() {
