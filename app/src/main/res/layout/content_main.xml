@@ -41,6 +41,21 @@
             app:layout_constraintTop_toBottomOf="@id/dealTitleTextView"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <TextView
+            android:id="@+id/dealFeaturesTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/text_margin"
+            app:layout_constraintTop_toBottomOf="@id/dealPriceTextView"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/dealSpecificationsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/dealFeaturesTextView"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>

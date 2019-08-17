@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import com.kirinpatel.ehformeh.R
 import com.kirinpatel.ehformeh.utils.Deal
 import com.squareup.picasso.Picasso
+import io.noties.markwon.Markwon
 
 class MainActivity : AppCompatActivity() {
 
@@ -56,6 +57,13 @@ class MainActivity : AppCompatActivity() {
         dealPriceTextView.text = deal.price
         dealPriceTextView.setTextColor(deal.theme.accentColor)
         Picasso.get().load(deal.photos[0]).into(findViewById<ImageView>(R.id.testImageView))
+        val markwon = Markwon.create(applicationContext)
+        val dealFeaturesTextView = findViewById<TextView>(R.id.dealFeaturesTextView)
+        markwon.setMarkdown(dealFeaturesTextView, deal.features)
+        dealFeaturesTextView.setTextColor(deal.theme.accentColor)
+        val dealSpecificationsTextView = findViewById<TextView>(R.id.dealSpecificationsTextView)
+        markwon.setMarkdown(dealSpecificationsTextView, deal.specifications)
+        dealSpecificationsTextView.setTextColor(deal.theme.accentColor)
     }
 
     companion object {
