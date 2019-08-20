@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import com.kirinpatel.ehformeh.R
 import com.kirinpatel.ehformeh.utils.Deal
@@ -18,6 +19,7 @@ class LoadingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_loading)
+        MobileAds.initialize(this, "ca-app-pub-9026572937829340/3372233259")
         loadCurrentTheme()
     }
 

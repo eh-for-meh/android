@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import com.kirinpatel.ehformeh.R
@@ -49,6 +52,9 @@ class MainActivity : AppCompatActivity() {
             setupTheme(theme)
             loadCurrentDeal()
         }
+
+        val dealFeatureBanner = findViewById<AdView>(R.id.dealFeatureBanner)
+        dealFeatureBanner.loadAd(AdRequest.Builder().build())
 
         buyFab.setOnClickListener {
             val uri = Uri.parse("https://meh.com/account/signin?returnurl=https%3A%2F%2Fmeh.com%2F%23checkout")
