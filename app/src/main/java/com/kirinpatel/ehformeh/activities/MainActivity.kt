@@ -11,22 +11,43 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.ImageViewCompat
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import com.kirinpatel.ehformeh.R
 import com.kirinpatel.ehformeh.utils.Deal
+import com.kirinpatel.ehformeh.utils.Theme
 import com.squareup.picasso.Picasso
 import io.noties.markwon.Markwon
 
 class MainActivity : AppCompatActivity() {
+
+
+    lateinit var backgroundConstraintLayout: ConstraintLayout
+    lateinit var constraintLayout: ConstraintLayout
+    lateinit var dealTitleTextView: TextView
+    lateinit var dealPriceTextView: TextView
+    lateinit var dealFeaturesTextView: TextView
+    lateinit var dealSpecificationsTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        backgroundConstraintLayout = findViewById(R.id.backgroundConstraintLayout)
+        constraintLayout = findViewById(R.id.constraintLayout)
+        dealTitleTextView = findViewById(R.id.dealTitleTextView)
+        dealPriceTextView = findViewById(R.id.dealPriceTextView)
+        dealFeaturesTextView = findViewById(R.id.dealFeaturesTextView)
+        dealSpecificationsTextView = findViewById(R.id.dealSpecificationsTextView)
+
         if (intent.extras != null && intent.extras[MainActivity.DEAL_KEY] != null) {
             val deal = intent.extras[MainActivity.DEAL_KEY] as Deal
             setupView(deal)
+        } else if (intent.extras != null && intent.extras[MainActivity.THEME_KEY] != null) {
+            val theme = intent.extras[MainActivity.THEME_KEY] as Theme
+            setupTheme(theme)
+            loadCurrentDeal()
         }
 
         buyFab.setOnClickListener {
@@ -36,42 +57,65 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupTheme(theme: Theme) {
+        val foreground = if (theme.isDark) Color.WHITE else Color.BLACK
+        app_bar.setBackgroundColor(theme.accentColor)
+        toolbar_layout.setBackgroundColor(theme.accentColor)
+        toolbar_layout.setExpandedTitleColor(theme.backgroundColor)
+        toolbar_layout.setCollapsedTitleTextColor(theme.backgroundColor)
+        toolbar.setBackgroundColor(theme.accentColor)
+        buyFab.backgroundTintList = ColorStateList.valueOf(foreground)
+        ImageViewCompat.setImageTintList(buyFab, ColorStateList.valueOf(theme.backgroundColor))
+        backgroundConstraintLayout.setBackgroundColor(theme.backgroundColor)
+        constraintLayout.setBackgroundColor(theme.backgroundColor)
+        dealTitleTextView.setTextColor(theme.accentColor)
+        dealPriceTextView.setTextColor(theme.accentColor)
+        dealFeaturesTextView.setTextColor(theme.accentColor)
+        dealSpecificationsTextView.setTextColor(theme.accentColor)
+    }
+
     private fun setupView(deal: Deal) {
-        app_bar.setBackgroundColor(deal.theme.accentColor)
-        toolbar_layout.setBackgroundColor(deal.theme.accentColor)
-        toolbar_layout.setExpandedTitleColor(deal.theme.backgroundColor)
-        toolbar_layout.setCollapsedTitleTextColor(deal.theme.backgroundColor)
-        toolbar.setBackgroundColor(deal.theme.accentColor)
+        constraintLayout.alpha = 1F
+        setupTheme(deal.theme)
         if (deal.date == null) {
             toolbar.title = "Today's Deal"
             toolbar_layout.title = "Today's Deal"
         }
-        buyFab.setBackgroundColor(deal.theme.accentColor)
-        ImageViewCompat.setImageTintList(buyFab, ColorStateList.valueOf(deal.theme.backgroundColor))
-        val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
-        constraintLayout.setBackgroundColor(deal.theme.backgroundColor)
-        val dealTitleTextView = findViewById<TextView>(R.id.dealTitleTextView)
         dealTitleTextView.text = deal.title
-        dealTitleTextView.setTextColor(deal.theme.accentColor)
-        val dealPriceTextView = findViewById<TextView>(R.id.dealPriceTextView)
         dealPriceTextView.text = deal.price
-        dealPriceTextView.setTextColor(deal.theme.accentColor)
         Picasso.get().load(deal.photos[0]).into(findViewById<ImageView>(R.id.testImageView))
         val markwon = Markwon.create(applicationContext)
-        val dealFeaturesTextView = findViewById<TextView>(R.id.dealFeaturesTextView)
         markwon.setMarkdown(dealFeaturesTextView, deal.features)
-        dealFeaturesTextView.setTextColor(deal.theme.accentColor)
-        val dealSpecificationsTextView = findViewById<TextView>(R.id.dealSpecificationsTextView)
         markwon.setMarkdown(dealSpecificationsTextView, deal.specifications)
-        dealSpecificationsTextView.setTextColor(deal.theme.accentColor)
+    }
+
+    private fun loadCurrentDeal() {
+        Deal.watchCurrentDeal({ deal ->
+            setupView(deal)
+        }) {
+            Snackbar
+                    .make(
+                            constraintLayout,
+                            "Unable to load this deal!",
+                            Snackbar.LENGTH_LONG)
+                    .setActionTextColor(Color.LTGRAY)
+                    .show()
+        }
     }
 
     companion object {
         private const val DEAL_KEY = "DEAL_KEY"
+        private const val THEME_KEY = "THEME_KEY"
 
         fun createIntent(context: Context, deal: Deal): Intent {
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra(DEAL_KEY, deal)
+            return intent
+        }
+
+        fun createIntent(context: Context, theme: Theme): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(THEME_KEY, theme)
             return intent
         }
     }

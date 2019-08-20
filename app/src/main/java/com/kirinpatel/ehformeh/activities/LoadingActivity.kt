@@ -64,8 +64,8 @@ class LoadingActivity : AppCompatActivity() {
     }
 
     private fun loadMainActivity() {
-        Deal.getCurrentDeal({ deal ->
-            val intent = MainActivity.createIntent(this, deal)
+        Theme.getCurrentTheme({ theme ->
+            val intent = MainActivity.createIntent(this, theme)
             startActivity(intent)
         }) { error ->
             val constraintLayout = findViewById<ConstraintLayout>(R.id.constraintLayout)
