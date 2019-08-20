@@ -37,11 +37,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupView(deal: Deal) {
-        val foregroundColor = if (deal.theme.isDark) Color.WHITE else Color.BLACK
-        app_bar.setBackgroundColor(foregroundColor)
-        toolbar_layout.setBackgroundColor(foregroundColor)
-        toolbar.setBackgroundColor(foregroundColor)
-        toolbar.setTitleTextColor(deal.theme.accentColor)
+        app_bar.setBackgroundColor(deal.theme.accentColor)
+        toolbar_layout.setBackgroundColor(deal.theme.accentColor)
+        toolbar_layout.setExpandedTitleColor(deal.theme.backgroundColor)
+        toolbar_layout.setCollapsedTitleTextColor(deal.theme.backgroundColor)
+        toolbar.setBackgroundColor(deal.theme.accentColor)
         if (deal.date == null) {
             toolbar.title = "Today's Deal"
             toolbar_layout.title = "Today's Deal"
